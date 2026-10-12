@@ -2,7 +2,9 @@
 
 사용: python3 tools/mockup.py <표지.png> <책등 제목> <저자> <출력.webp>
 1권 목업(1100x1226, 책등이 왼쪽)과 나란히 서가에 놓이도록 캔버스와 각도를 맞췄다.
+책등 글꼴은 환경 변수로 바꾼다: MOCKUP_TITLE_FONT(제목), MOCKUP_AUTHOR_FONT(저자).
 """
+import os
 import sys
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
@@ -10,8 +12,8 @@ W, H = 1100, 1226
 FRONT = [(412, 132), (1044, 66), (1048, 1092), (416, 1166)]   # TL, TR, BR, BL
 SPINE = [(352, 118), (412, 132), (416, 1166), (356, 1146)]
 TOP = [(352, 118), (412, 132), (1044, 66), (986, 54)]   # 위에서 내려다본 종이 단면
-GOTHIC = "/Users/zs_olef.x/Work/Startup/first-payment/typeset/fonts/GothicA1-Black.ttf"
-PRETENDARD = "/Users/zs_olef.x/Library/Fonts/Pretendard-SemiBold.otf"
+GOTHIC = os.environ.get("MOCKUP_TITLE_FONT", "GothicA1-Black.ttf")
+PRETENDARD = os.environ.get("MOCKUP_AUTHOR_FONT", "Pretendard-SemiBold.otf")
 
 
 def solve(a, b):

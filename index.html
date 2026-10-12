@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>북키, 만들면서 쓴 책</title>
+<meta name="description" content="혼자 서비스를 만들고 운영하면서 막혔던 자리와 고친 방법을 책으로 냅니다. 모두 PDF, 결제하면 메일로 바로 받습니다.">
+<meta property="og:title" content="북키, 만들면서 쓴 책">
+<meta property="og:description" content="혼자 서비스를 만들고 운영하면서 막혔던 자리와 고친 방법을 책으로 냅니다.">
+<meta property="og:image" content="/assets/og/home.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFFFFF; --ink: #111214; --muted: #5C6068; --rule: #E6E7EA;
+  --b1-paper: #F2EEE5; --b1-ink: #22201C; --b1-pen: #C8261B; --b1-pencil: #625C53;
+  --b2-paper: #F1F2F4; --b2-ink: #0E1014; --b2-hl: #FFE14D; --b2-muted: #5B606B;
+  --side: 20px;
+}
+@media (min-width: 720px) { :root { --side: 40px; } }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif; font-size: 16px; line-height: 1.7; letter-spacing: -0.02em; word-break: keep-all; overflow-wrap: break-word; }
+a { color: inherit; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--side); }
+
+/* 상단 */
+.top { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.mark { display: inline-flex; align-items: baseline; gap: 8px; text-decoration: none; }
+.mark b { font-size: 22px; font-weight: 800; letter-spacing: -0.06em; }
+.mark span { font: 500 12px "Geist Mono", ui-monospace, monospace; color: var(--muted); letter-spacing: 0; }
+.top nav { display: flex; gap: 20px; font-size: 15px; }
+.top nav a { text-decoration: none; color: var(--muted); }
+.top nav a:hover { color: var(--ink); }
+
+/* 첫 화면 */
+.hero { padding-block: 48px 40px; }
+@media (min-width: 860px) { .hero { padding-block: 88px 64px; } }
+.hero h1 { margin: 0; font-size: clamp(40px, 8.4vw, 92px); line-height: 1.06; font-weight: 800; letter-spacing: -0.055em; }
+.hero p { margin: 22px 0 0; max-width: 30em; color: var(--muted); font-size: clamp(16px, 2vw, 19px); line-height: 1.75; }
+
+/* 서가 */
+.shelf { display: grid; gap: 16px; padding-bottom: 72px; }
+@media (min-width: 700px) { .shelf { grid-template-columns: 1fr 1fr; gap: 16px; } }
+.book { position: relative; display: flex; flex-direction: column; text-decoration: none; padding: 28px 24px 26px; min-height: 100%; overflow: hidden; }
+@media (min-width: 860px) { .book { padding: 40px 40px 36px; } }
+.book .cover { display: block; width: min(78%, 360px); margin: 6px auto 22px; aspect-ratio: 1100 / 1226; transition: transform 280ms cubic-bezier(.2,.7,.2,1); will-change: transform; }
+.book .cover img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.book:hover .cover, .book:focus-visible .cover { transform: translateY(-10px) rotate(-1.2deg); }
+@media (prefers-reduced-motion: reduce) { .book .cover { transition: none; } .book:hover .cover, .book:focus-visible .cover { transform: none; } }
+.book .meta { font: 500 13px/1.5 "Geist Mono", "Pretendard Variable", monospace; letter-spacing: 0; margin-bottom: 10px; }
+.book h2 { margin: 0; font-size: clamp(28px, 4.4vw, 40px); line-height: 1.15; letter-spacing: -0.05em; font-weight: 800; }
+.book .line { margin: 10px 0 0; font-size: 16px; line-height: 1.65; }
+.book .go { margin-top: auto; padding-top: 22px; font-size: 15px; font-weight: 700; display: inline-flex; gap: 8px; align-items: center; }
+.book .go::after { content: "→"; transition: transform 200ms; }
+.book:hover .go::after { transform: translateX(4px); }
+.book:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* 1권: 교정지 */
+.b1 { background: var(--b1-paper); color: var(--b1-ink); }
+.b1 .meta { color: var(--b1-pencil); }
+.b1 .go { color: var(--b1-ink); }
+.b1 .go span { box-shadow: inset 0 -2px 0 var(--b1-pen); }
+.b1 .line { color: var(--b1-pencil); }
+/* 2권: 로그 */
+.b2 { background: var(--b2-paper); color: var(--b2-ink); }
+.b2 .meta { color: var(--b2-muted); }
+.b2 .line { color: var(--b2-muted); }
+.b2 .go span { background: linear-gradient(transparent 55%, var(--b2-hl) 55%); }
+.b2 .logbg { position: absolute; inset: 0 0 auto 0; height: 46%; padding: 18px 0 0 24px; font: 400 9px/14px "Geist Mono", monospace; color: #B9BDC5; white-space: pre; overflow: hidden; pointer-events: none; letter-spacing: 0; -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent); }
+.b2 .logbg mark { background: var(--b2-hl); color: var(--b2-ink); }
+.b2 > *:not(.logbg) { position: relative; }
+
+/* 약속 */
+.promise { padding-block: 64px 72px; border-top: 1px solid var(--rule); }
+.promise h2 { margin: 0 0 28px; font-size: clamp(24px, 3.6vw, 34px); letter-spacing: -0.045em; line-height: 1.25; }
+.promise ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+@media (min-width: 860px) { .promise ol { grid-template-columns: repeat(3, 1fr); gap: 40px; } }
+.promise li { display: grid; grid-template-columns: 40px 1fr; gap: 4px; font-size: 16px; line-height: 1.7; }
+.promise li b { font: 500 14px/1.9 "Geist Mono", monospace; color: var(--muted); letter-spacing: 0; }
+
+footer { padding: 28px 0 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--rule); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; }
+footer a { color: var(--muted); }
+</style>
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '960331093201744');
+fbq('track', 'PageView');
+</script>
+</head>
+<body>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=960331093201744&ev=PageView&noscript=1" alt=""></noscript>
+
+<header class="wrap top">
+  <a class="mark" href="/" aria-label="북키 첫 화면"><b>북키</b><span>bookky</span></a>
+  <nav><a href="#shelf">책</a><a href="#about">북키는</a></nav>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <h1>만들면서<br>쓴 책</h1>
+    <p>혼자 서비스를 만들고 운영하면서 막혔던 자리와 고친 방법을 책으로 냅니다. 모두 PDF라서 결제하면 메일로 바로 받습니다.</p>
+  </div>
+
+  <div class="wrap shelf" id="shelf">
+    <a class="book b1" href="/books/vibecoding-gyojeong/" data-book-link="바이브코딩 교정법">
+      <span class="cover"><img src="/assets/covers/vibecoding-gyojeong-3d.webp" alt="「바이브코딩 교정법」 표지. 크림색 종이에 AI가 한 말이 인쇄돼 있고 빨간 펜으로 고친 자국이 있다." width="1100" height="1226" loading="eager"></span>
+      <span class="meta">판매 중 · 19,900원 · PDF 210쪽</span>
+      <h2>바이브코딩 교정법</h2>
+      <p class="line">AI가 '다 고쳤습니다'라고 할 때, 진짜로 고치는 법. 입문 말고, 막혔을 때 펴는 책.</p>
+      <span class="go"><span>자세히 보기</span></span>
+    </a>
+
+    <a class="book b2" href="/books/first-payment/" data-book-link="첫 결제">
+      <span class="logbg" aria-hidden="true">bae27bf  2026-04-14  feat: switch Whisper from OpenAI to Groq with OpenAI fallback
+42e3669  2026-04-14  fix: pass project ID to dashboard when transcribing from LMS
+2030b35  2026-04-14  feat: switch to per-minute credit system with <mark>first purchase bonus</mark>
+ae02d04  2026-04-14  feat: add floating AI agent panel with LangGraph backend
+86765fe  2026-04-14  fix: resolve httpx version conflict for langgraph dependencies
+040039c  2026-04-14  feat: add project instructions and file uploads for AI agent context</span>
+      <span class="cover"><img src="/assets/covers/first-payment-3d.webp" alt="「첫 결제」 표지. 회색 바탕에 실제 커밋 기록이 깔려 있고 한 줄에 노란 검색 표시가 있다." width="1100" height="1226" loading="eager"></span>
+      <span class="meta">출간 준비 중 · PDF 약 240쪽</span>
+      <h2>첫 결제</h2>
+      <p class="line">혼자 만든 서비스가 돈을 받기까지. 문제를 고르고, 결제를 붙이고, 가격을 바꾸고, 혼자 굴린 기록.</p>
+      <span class="go"><span>자세히 보기</span></span>
+    </a>
+  </div>
+
+  <section class="wrap promise" id="about">
+    <h2>북키는 이렇게 만듭니다</h2>
+    <ol>
+      <li><b>01</b><span>책에 나오는 사례와 숫자는 저장소와 작업 기록에서 확인한 것만 씁니다.</span></li>
+      <li><b>02</b><span>실제 구매자 후기가 생기기 전에는 후기 자리를 비워 둡니다. 마감 타이머도 없습니다.</span></li>
+      <li><b>03</b><span>회원 가입 없이 Polar로 결제합니다. 국내 카드, 카카오페이, 네이버페이를 쓸 수 있습니다.</span></li>
+    </ol>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>북키 · 만들면서 쓴 책</span>
+    <span>문의 <span class="js-contact"></span></span>
+  </div>
+</footer>
+
+<script>window.BOOKKY = { page: "home", contact: "hi.danleedev@gmail.com" };</script>
+<script src="/assets/bookky.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+# 배포에 싣지 않는 것: 이미지 생성 도구와 저장소 설정
+tools/
+.gitignore
+.vercelignore

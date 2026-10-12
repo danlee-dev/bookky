@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>첫 결제, 혼자 만든 서비스가 돈을 받기까지</title>
+<meta name="description" content="출시하고 12일 동안 가격을 세 번 바꾼 1인 SaaS의 기록. 문제를 고르고, 결제를 붙이고, 가격을 정하고, 혼자 굴리기까지. 북키 출간 준비 중.">
+<meta property="og:title" content="첫 결제, 혼자 만든 서비스가 돈을 받기까지">
+<meta property="og:description" content="출시하고 12일 동안 가격을 세 번 바꾼 1인 SaaS의 기록.">
+<meta property="og:image" content="/assets/og/first-payment.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "MaruBuri Sub"; src: url("/assets/fonts/maruburi-regular-fp.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "MaruBuri Sub"; src: url("/assets/fonts/maruburi-bold-fp.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+/* 「첫 결제」 테마: 로그. 회색 지면, 실제 커밋 기록, 노란 검색 표시 하나 (책 DESIGN.md v2) */
+:root {
+  --paper: #F3F4F6; --sheet: #FFFFFF; --ink: #0E1014; --muted: #5B606B; --rule: #DADDE3;
+  --log: #A7ACB5; --hl: #FFE14D; --dark: #0B0C0E; --log-dark: #3C4048; --on-dark: #FFFFFF; --on-dark-muted: #8A90A0;
+  --side: 20px;
+  --mono: "Geist Mono", "Pretendard Variable", ui-monospace, monospace;
+  --text: "MaruBuri Sub", "Pretendard Variable", serif;
+}
+@media (min-width: 720px) { :root { --side: 40px; } }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif; font-size: 16px; line-height: 1.7; letter-spacing: -0.02em; word-break: keep-all; overflow-wrap: break-word; }
+a { color: inherit; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--side); }
+mark { background: var(--hl); color: var(--ink); padding: 0 .12em; }
+
+/* 북키 줄 */
+.bk { display: flex; align-items: center; justify-content: space-between; height: 56px; font-size: 14px; }
+.bk a { text-decoration: none; color: var(--muted); }
+.bk a b { color: var(--ink); font-weight: 800; letter-spacing: -0.05em; font-size: 17px; }
+.bk a:hover { color: var(--ink); }
+
+/* 첫 화면 */
+.hero { position: relative; overflow: hidden; padding: 20px 0 56px; }
+.hero .log { position: absolute; top: 0; left: -268px; right: 0; height: 132px; overflow: hidden; padding: 14px 0 0 var(--side); font: 400 10px/16px var(--mono); color: #C3C7CE; white-space: pre; letter-spacing: 0; pointer-events: none; -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 72%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 72%, transparent 100%); }
+@media (min-width: 720px) { .hero .log { left: 0; height: 236px; font-size: 11px; line-height: 17px; } }
+.hero .log .on { color: var(--ink); }
+.hero .log mark { background-image: linear-gradient(var(--hl), var(--hl)); background-color: transparent; background-repeat: no-repeat; background-size: 0% 100%; animation: sweep 900ms 400ms cubic-bezier(.3,.7,.2,1) forwards; }
+@keyframes sweep { to { background-size: 100% 100%; } }
+@media (prefers-reduced-motion: reduce) { .hero .log mark { animation: none; background-size: 100% 100%; } }
+.hero .in { position: relative; display: grid; gap: 28px; padding-top: 128px; }
+@media (min-width: 720px) { .hero .in { padding-top: 252px; } }
+@media (min-width: 900px) { .hero .in { grid-template-columns: 1.15fr 1fr; align-items: start; } .hero .book { margin-top: -24px; } }
+.status { font: 500 13px/1.5 var(--mono); color: var(--muted); letter-spacing: 0; }
+.hero h1 { margin: .16em 0 0; font-family: "Gothic A1", "Pretendard Variable", sans-serif; font-weight: 900; font-size: clamp(84px, 21vw, 196px); line-height: .98; letter-spacing: -0.075em; }
+.hero .sub { margin: 12px 0 0; font-size: clamp(18px, 2.6vw, 24px); font-weight: 700; letter-spacing: -0.04em; }
+.hero .lead { margin: 22px 0 0; max-width: 31em; font-family: var(--text); font-size: 17px; line-height: 1.9; letter-spacing: -0.03em; }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; font-size: 16px; font-weight: 700; text-decoration: none; border-radius: 2px; transition: transform 150ms, background-color 150ms; }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--ink); color: var(--on-dark); }
+.btn.primary:hover { background: #24272E; }
+.btn.ghost { color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.btn.ghost:hover { background: var(--sheet); }
+.btn:focus-visible { outline: 3px solid var(--hl); outline-offset: 3px; }
+.small { margin-top: 12px; font-size: 13px; color: var(--muted); }
+.hero .book { justify-self: center; width: min(88%, 470px); }
+.hero .book img { width: 100%; height: auto; display: block; }
+
+/* 공통 섹션 */
+section { padding: 72px 0; }
+section h2 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 40px); line-height: 1.2; letter-spacing: -0.05em; font-weight: 800; }
+section .intro { margin: 0 0 32px; color: var(--muted); max-width: 34em; }
+
+/* 기록에서 꺼낸 장면 */
+.records { background: var(--dark); color: var(--on-dark); }
+.records .intro { color: var(--on-dark-muted); }
+.rec { list-style: none; margin: 0; padding: 0; }
+.rec li { padding: 22px 0; border-top: 1px solid #1E2127; display: grid; gap: 8px; }
+.rec li:last-child { border-bottom: 1px solid #1E2127; }
+@media (min-width: 900px) { .rec li { grid-template-columns: 150px 1fr 1fr; gap: 28px; align-items: baseline; } }
+.rec .d { font: 500 13px var(--mono); color: var(--on-dark-muted); letter-spacing: 0; }
+.rec code { font: 400 14px/1.7 var(--mono); color: #C9CDD4; letter-spacing: 0; overflow-wrap: anywhere; }
+.rec code mark { color: var(--ink); }
+.rec p { margin: 0; font-size: 16px; line-height: 1.7; }
+.rec p em { font-style: normal; font: 500 12px var(--mono); color: var(--on-dark-muted); margin-left: 6px; letter-spacing: 0; }
+
+/* 펴 두고 쓰는 책 */
+.use-grid { display: grid; gap: 20px; }
+@media (min-width: 980px) { .use-grid { grid-template-columns: 1.25fr 1fr; gap: 24px; align-items: start; } }
+.use figure { margin: 0; }
+.use figcaption { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 14px; font-size: 15px; }
+.use figcaption span { font: 500 12px var(--mono); color: var(--muted); letter-spacing: 0; white-space: nowrap; }
+.sheet { background: var(--sheet); padding: 24px 20px 20px; box-shadow: 0 1px 2px rgba(14,16,20,.06), 0 12px 32px rgba(14,16,20,.08); }
+@media (min-width: 720px) { .sheet { padding: 32px 32px 26px; } }
+.sheet table { width: 100%; border-collapse: collapse; font-size: 14.5px; line-height: 1.6; }
+.sheet th { text-align: left; font: 600 12.5px "Pretendard Variable", Pretendard, sans-serif; color: var(--muted); letter-spacing: -0.01em; padding: 0 12px 10px 0; border-bottom: 1.5px solid var(--ink); }
+.sheet td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.sheet td:first-child { font-weight: 700; white-space: nowrap; }
+.sheet mark { background-color: transparent; background-image: linear-gradient(var(--hl), var(--hl)); background-repeat: no-repeat; background-size: 0% 100%; transition: background-size 900ms cubic-bezier(.3,.7,.2,1) 200ms; padding: 0 .1em; }
+.sheet mark.on { background-size: 100% 100%; }
+@media (prefers-reduced-motion: reduce) { .sheet mark { transition: none; background-size: 100% 100%; } }
+.sheet .note { margin: 16px 0 0; font-family: var(--text); font-size: 15px; line-height: 1.8; color: #2A2D33; }
+@media (max-width: 719px) {
+  .sheet thead { display: none; }
+  .sheet tr { display: grid; gap: 2px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  .sheet tr:first-child { border-top: 1.5px solid var(--ink); }
+  .sheet td { padding: 0; border: 0; }
+  .sheet td:first-child { font: 600 13px "Pretendard Variable", Pretendard, sans-serif; color: var(--muted); }
+  .sheet td:last-child { font-weight: 600; }
+  .sheet td:last-child::before { content: "→ "; color: var(--muted); font-weight: 400; }
+}
+.pcard { background: var(--dark); color: var(--on-dark); padding: 22px 20px 20px; position: relative; }
+@media (min-width: 720px) { .pcard { padding: 28px 28px 24px; } }
+.pcard figcaption { display: block; font: 500 12px/1.6 var(--mono); color: var(--on-dark-muted); letter-spacing: 0; }
+.pcard figcaption b { color: var(--hl); font-weight: 500; }
+.pcard pre { margin: 0; font: 400 13.5px/1.85 var(--mono); color: #E6E8EC; letter-spacing: 0; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; }
+.copy { margin-top: 18px; min-height: 44px; padding: 0 18px; border: 0; border-radius: 2px; background: var(--hl); color: var(--ink); font: 700 15px "Pretendard Variable", Pretendard, sans-serif; letter-spacing: -0.02em; cursor: pointer; transition: transform 150ms; }
+.copy:active { transform: translateY(1px); }
+.copy:focus-visible { outline: 3px solid var(--on-dark); outline-offset: 3px; }
+.use .more { margin: 28px 0 0; max-width: 40em; font-family: var(--text); font-size: 16px; line-height: 1.85; color: #2A2D33; }
+
+/* 차례 */
+.toc details { border-top: 1px solid var(--rule); }
+.toc details:last-of-type { border-bottom: 1px solid var(--rule); }
+.toc summary { display: flex; gap: 16px; align-items: baseline; padding: 18px 0; cursor: pointer; list-style: none; font-size: 19px; font-weight: 700; letter-spacing: -0.035em; }
+.toc summary::-webkit-details-marker { display: none; }
+.toc summary .n { font: 500 13px var(--mono); color: var(--muted); letter-spacing: 0; min-width: 34px; }
+.toc summary::after { content: "+"; margin-left: auto; font: 500 18px var(--mono); color: var(--muted); }
+.toc details[open] summary::after { content: "–"; }
+.toc ol { list-style: none; margin: 0 0 18px 50px; padding: 0; }
+.toc li { padding: 4px 0; color: #2A2D33; font-family: var(--text); font-size: 16px; }
+.toc li span { font: 500 12px var(--mono); color: var(--muted); margin-right: 10px; letter-spacing: 0; }
+.toc li small { display: block; margin: 2px 0 0 28px; font: 400 14px/1.6 "Pretendard Variable", Pretendard, sans-serif; color: var(--muted); letter-spacing: -0.02em; }
+
+/* 본문 미리 보기 */
+.pages { display: grid; grid-auto-flow: column; grid-auto-columns: min(78%, 330px); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--side); padding: 4px var(--side) 18px; margin: 0 calc(var(--side) * -1); }
+.pages figure { margin: 0; scroll-snap-align: start; }
+.pages img { width: 100%; height: auto; display: block; background: var(--sheet); box-shadow: 0 1px 2px rgba(14,16,20,.06), 0 12px 32px rgba(14,16,20,.10); }
+.pages figcaption { margin-top: 12px; font-size: 14px; color: var(--muted); }
+
+/* 이 책에 없는 것 */
+.not { background: var(--sheet); }
+.not .cols { display: grid; gap: 28px; }
+@media (min-width: 900px) { .not .cols { grid-template-columns: 1fr 1fr; gap: 56px; } }
+.not p { margin: 0 0 14px; font-family: var(--text); font-size: 17px; line-height: 1.9; letter-spacing: -0.03em; }
+
+/* 책 정보 */
+.info dl { display: grid; grid-template-columns: 96px 1fr; gap: 12px 20px; margin: 0; }
+.info dt { font: 500 13px/1.8 var(--mono); color: var(--muted); letter-spacing: 0; }
+.info dd { margin: 0; }
+
+/* FAQ */
+.faq details { border-top: 1px solid var(--rule); }
+.faq details:last-of-type { border-bottom: 1px solid var(--rule); }
+.faq summary { padding: 18px 0; cursor: pointer; list-style: none; font-weight: 700; font-size: 17px; display: flex; gap: 12px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before { content: "Q"; font: 500 14px/1.9 var(--mono); color: var(--muted); }
+.faq .a { padding: 0 0 20px 26px; font-family: var(--text); font-size: 16px; line-height: 1.85; color: #2A2D33; }
+
+/* 마지막 */
+.end { background: var(--dark); color: var(--on-dark); position: relative; overflow: hidden; }
+.end .log { position: absolute; inset: 0; padding: 24px 0 0 var(--side); font: 400 11px/18px var(--mono); color: var(--log-dark); white-space: pre; pointer-events: none; letter-spacing: 0; opacity: .7; }
+.end .log mark { color: var(--ink); }
+.end .in { position: relative; padding-block: 140px 24px; }
+.end h2 { font-size: clamp(30px, 5vw, 52px); }
+.end p { color: var(--on-dark-muted); max-width: 30em; }
+.end .btn.primary { background: var(--hl); color: var(--ink); }
+.end .btn.primary:hover { background: #FFEA7A; }
+
+footer { padding: 28px 0 48px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; }
+footer a { color: var(--muted); }
+</style>
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '960331093201744');
+fbq('track', 'PageView');
+</script>
+</head>
+<body>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=960331093201744&ev=PageView&noscript=1" alt=""></noscript>
+
+<header class="wrap bk">
+  <a href="/" aria-label="북키 서가로"><b>북키</b>&nbsp; 다른 책 보기</a>
+  <a href="#toc">차례</a>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="log" aria-hidden="true">0c5c26c  2026-04-13  docs: rewrite README with updated screenshots and add MIT license
+2c8d5ee  2026-04-13  fix: add async to setTimeout callback and user_id filter to transcripts GET
+eb3f4a4  2026-04-13  chore: add Google Search Console meta tag verification
+5c54447  2026-04-13  feat: add sitemap.xml for Google Search Console
+bae27bf  2026-04-14  feat: switch Whisper from OpenAI to Groq with OpenAI fallback
+42e3669  2026-04-14  fix: pass project ID to dashboard when transcribing from LMS
+<span class="on">2030b35  2026-04-14  feat: switch to per-minute credit system with <mark>first purchase bonus</mark></span>
+ae02d04  2026-04-14  feat: add floating AI agent panel with LangGraph backend
+86765fe  2026-04-14  fix: resolve httpx version conflict for langgraph dependencies
+040039c  2026-04-14  feat: add project instructions and file uploads for AI agent context
+9a8bd2f  2026-04-14  fix: use Bearer auth header for backend agent requests
+834d156  2026-04-14  fix: move File/UploadFile import to top of main.py
+bee2954  2026-04-14  feat: Claude-style two-column project layout with instructions and files
+9f12439  2026-04-14  feat: Claude-style modal for project instructions</div>
+    <div class="wrap in">
+      <div>
+        <div class="status">출간 준비 중 · PDF 약 240쪽 · 다니엘 지음</div>
+        <h1>첫 결제</h1>
+        <p class="sub">혼자 만든 서비스가 돈을 받기까지</p>
+        <p class="lead">출시하고 12일 동안 가격을 세 번 바꿨다. 첫 구매 보너스는 반년 가까이 화면에만 있었다. 결제 서비스를 옮기던 날 아침에는 16분 동안 결제한 사람에게 크레딧이 들어가지 않았다. 이 책은 혼자 만든 서비스 하나의 기록을 처음부터 다시 따라간다.</p>
+        <div class="ctas" id="cta-top">
+          <a class="btn primary js-cta" data-place="hero" href="#end">출간 알림 받기</a>
+          <a class="btn ghost" href="#sample">본문 미리 보기</a>
+        </div>
+        <p class="small">원고와 조판을 마치고 마지막 확인 중입니다.</p>
+      </div>
+      <div class="book"><img src="/assets/covers/first-payment-3d.webp" alt="「첫 결제」 표지. 회색 바탕에 실제 커밋 기록이 깔려 있고, 'first purchase bonus'에 노란 검색 표시가 있다. 아래에 큰 글씨로 첫 결제." width="1100" height="1226"></div>
+    </div>
+  </div>
+
+  <section class="records">
+    <div class="wrap">
+      <h2>기록에서 꺼낸 장면</h2>
+      <p class="intro">책의 사례는 전부 이 서비스의 저장소에서 가져왔다. 커밋 687개와 작업일지, 기획 문서. 몇 줄만 먼저 보여 준다.</p>
+      <ol class="rec">
+        <li><span class="d">2026-04-11</span><code>feat: credit deduction <mark>on success only</mark></code><p>출시 첫날, 결과가 나왔을 때만 크레딧을 빼도록 바꿨다.<em>4장</em></p></li>
+        <li><span class="d">2026-04-15</span><code>A user tried the same YouTube URL <mark>12 times in 10 minutes</mark></code><p>같은 주소를 열두 번 넣은 사람이 빈 결과 열한 번에 크레딧을 하나씩 잃었다.<em>4장</em></p></li>
+        <li><span class="d">2026-04-23</span><code>pricing: <mark>aggressive repricing</mark> — ~40% off</code><p>가장 작은 충전 묶음이 4,900원에서 2,900원이 됐다. 출시 12일 동안 세 번째 가격 변경이다.<em>8장</em></p></li>
+        <li><span class="d">2026-04-29</span><code>chore(<mark>harness</mark>): rewrite CLAUDE.md with production context</code><p>AI 도구가 매번 읽을 규칙을 파일 하나에 모았다. 202줄로 시작해 지금은 220줄이다. 공식 문서가 권하는 선은 200줄이다.<em>5장</em></p></li>
+        <li><span class="d">2026-09-09</span><code><mark>10,559 credits owed against 361 collected</mark></code><p>감사해 보니 청구해야 할 크레딧 10,559개 가운데 361개만 걷고 있었다.<em>8장</em></p></li>
+        <li><span class="d">2026-10-09</span><code><mark>every real order.paid was refused with 401</mark></code><p>결제 서비스를 옮긴 날 아침, 16분 동안 결제한 사람에게 크레딧이 들어가지 않았다.<em>7장</em></p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="use" id="use">
+    <div class="wrap">
+      <h2>펴 두고 쓰는 책</h2>
+      <p class="intro">읽고 덮을 책으로 쓰지 않았다. 저장소 옆에 펴 두고 바로 쓰도록 표와 프롬프트로 남겼다. 5장 「바이브코딩으로 혼자 만든다」에서 두 개만 먼저 꺼낸다.</p>
+      <div class="use-grid">
+        <figure class="sheet">
+          <figcaption><b>에이전트와 일할 때 멈춰야 할 신호</b><span>5장</span></figcaption>
+          <table>
+            <thead><tr><th>언제</th><th>이런 신호가 보이면</th><th>이렇게 한다</th></tr></thead>
+            <tbody>
+              <tr><td>시작 전</td><td>기획서와 API 문서 없이 "앱 만들어 줘" 한 줄로 시작하려 한다</td><td>코드 말고 문서부터 채운다</td></tr>
+              <tr><td>계획 받을 때</td><td>문서에 없는 파일이나 패키지, 이번 단계보다 큰 범위</td><td>실행 전에 묻거나 뺀다</td></tr>
+              <tr><td>실행 중</td><td>같은 에러가 두 번, 갑자기 많은 파일이 바뀜</td><td>멈추고 diff를 읽는다. 이상하면 되돌리고 더 작게</td></tr>
+              <tr class="hit"><td>결과를 볼 때</td><td><mark class="js-sweep">에러 없이 값이 이상함</mark>, 새로고침하면 사라짐</td><td>데이터가 저장되는 곳과 키를 읽는 곳을 직접 따라간다</td></tr>
+              <tr><td>대화가 길 때</td><td>앞에서 정한 것을 잊음, 같은 설명을 되풀이하게 됨</td><td>결정을 문서에 적고 새 대화에서 문서부터 읽힌다</td></tr>
+            </tbody>
+          </table>
+          <p class="note">가장 놓치기 쉬운 줄은 노란 칸이다. 이 서비스는 9월 9일 감사 전까지 세 경로에서 오류 하나 없이 1크레딧만 걷고 있었다.</p>
+        </figure>
+        <figure class="pcard">
+          <figcaption><b>프롬프트</b> · 코드보다 API 문서를 먼저 받을 때</figcaption>
+          <pre id="p-api">docs/PRD.md를 읽고 docs/API.md 초안을 써 줘. 코드는 아직 쓰지 마.
+- 화면 목록: 화면마다 사용자가 보는 것과 누르는 것
+- 테이블과 컬럼, 행마다 누구의 데이터인지(user_id)
+- API 목록: 주소, 입력, 출력, 실패할 때의 응답. 돈·크레딧·권한을 바꾸는 API에는 [돈] 표시
+- 필요한 키와 그 키를 읽는 파일. 브라우저로 가도 되는 값과 서버에만 둘 값을 나눠서
+- 이번에 만들지 않는 것
+쓰기 전에 애매한 것을 나한테 세 가지만 먼저 물어봐.</pre>
+          <button class="copy" type="button" data-copy="p-api" data-name="코드보다 API 문서를 먼저 받을 때">복사하기</button>
+        </figure>
+      </div>
+      <p class="more">책 끝에는 그대로 붙여 쓰는 프롬프트 34개, 출시 전 점검표 69줄, 배포가 안 될 때 먼저 볼 곳 일곱 가지를 모았다. 규칙 파일과 훅, 비밀 키를 두는 자리, AI에 DB를 연결할 때 좁힐 범위는 부록 G에 한 장으로 정리했다.</p>
+    </div>
+  </section>
+
+  <section class="toc" id="toc">
+    <div class="wrap">
+      <h2>차례</h2>
+      <p class="intro">다섯 부, 열네 장, 부록 일곱 개. 돈을 받기 전에 정할 것에서 시작해, 받은 뒤에 감당할 것으로 끝난다.</p>
+      <details open><summary><span class="n">1부</span>돈 되는 문제 찾기</summary><ol><li><span>01</span>아이디어 말고 지갑을 찾는다</li><li><span>02</span>작게, 좁게 시작한다</li><li><span>03</span>만들기 전에 팔아본다</li></ol></details>
+      <details><summary><span class="n">2부</span>MVP 말고 MUP</summary><ol><li><span>04</span>MVP로는 왜 돈을 못 받나</li><li><span>05</span>바이브코딩으로 혼자 만든다<small>사람이 쥐고 있을 것, 규칙 파일과 훅, 멈춰야 할 신호, 비밀 키를 두는 곳</small></li><li><span>06</span>처음부터 깔아둘 것: 로그인, 결제, 환불, 로그</li></ol></details>
+      <details><summary><span class="n">3부</span>돈 받기</summary><ol><li><span>07</span>결제 서비스 고르기</li><li><span>08</span>가격 정하기: 구독이냐 크레딧이냐</li><li><span>09</span>사업자, 세금, 약관, 환불</li></ol></details>
+      <details><summary><span class="n">4부</span>사람 모으기</summary><ol><li><span>10</span>첫 100명</li><li><span>11</span>광고와 측정</li><li><span>12</span>쓰임이 몰리는 때: 시험 기간</li></ol></details>
+      <details><summary><span class="n">5부</span>키우기</summary><ol><li><span>13</span>혼자 운영하기: 문의, 장애, 비용</li><li><span>14</span>넓히기: 확장 프로그램, 앱, 함께할 사람</li></ol></details>
+      <details><summary><span class="n">부록</span>바로 펴서 쓰는 것들</summary><ol><li><span>A</span>결제 서비스 비교표</li><li><span>B</span>출시 전 점검표</li><li><span>C</span>한 달 운영 비용표</li><li><span>D</span>바로 쓰는 프롬프트 모음</li><li><span>E</span>용어 풀이</li><li><span>F</span>법·세금 출처와 더 읽을 것</li><li><span>G</span>에이전트에게 맡기기 전에<small>규칙·스킬·훅의 자리, 권한 모드, DB 연결 범위, 배포 장애표</small></li></ol></details>
+    </div>
+  </section>
+
+  <section class="sample" id="sample">
+    <div class="wrap">
+      <h2>본문 미리 보기</h2>
+      <p class="intro">휴대폰과 태블릿에서 읽기 좋게 125×200mm로 짰다. 본문은 명조, 실제 기록은 회색 띠, 그대로 복사해 쓰는 프롬프트는 검은 상자에 담았다. 꼭 기억할 문장은 노란 형광으로 칠했다.</p>
+      <div class="pages">
+        <figure><img src="/assets/pages/first-payment-ch1.webp" alt="1장 첫 쪽. 장 번호 01과 제목, 리드 문장, 랜딩 카피를 옮긴 기록 띠." width="837" height="1339" loading="lazy"><figcaption>1장 첫 쪽</figcaption></figure>
+        <figure><img src="/assets/pages/first-payment-ch5-roles.webp" alt="5장 본문. 사람이 정할 일과 에이전트에게 맡길 일을 나눈 표 아래에 노란 형광으로 칠한 문장." width="837" height="1339" loading="lazy"><figcaption>5장 사람이 쥐고 있을 것</figcaption></figure>
+        <figure><img src="/assets/pages/first-payment-ch5-signals.webp" alt="5장 본문. 고친 것이 다음 고장을 드러낸 4월 22~24일을 소개하는 문단과 멈춰야 할 신호 표." width="837" height="1339" loading="lazy"><figcaption>5장 멈춰야 할 신호</figcaption></figure>
+        <figure><img src="/assets/pages/first-payment-ch7-compare.webp" alt="7장 결제 서비스 비교표 쪽." width="837" height="1339" loading="lazy"><figcaption>7장 결제 서비스 비교</figcaption></figure>
+        <figure><img src="/assets/pages/first-payment-prompt.webp" alt="들머리의 프롬프트 상자 쪽." width="837" height="1339" loading="lazy"><figcaption>그대로 쓰는 프롬프트</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="not">
+    <div class="wrap cols">
+      <div>
+        <h2>이런 사람이 펴는 책</h2>
+        <p>Claude Code나 Cursor로 웹앱 하나쯤은 띄워 봤다. 로그인이 붙고 배포 주소도 있다. 그 주소로 돈이 들어온 적은 아직 없다.</p>
+        <p>결제 서비스 가입 화면에서 사업자등록번호 칸을 보고 창을 닫았거나, 가격을 얼마로 할지 정하지 못해 멈춘 프로젝트가 있다면 이 책이 그다음 순서를 알려 준다.</p>
+      </div>
+      <div>
+        <h2>이 책에 없는 것</h2>
+        <p>투자 유치와 팀 빌딩, 기업 영업은 다루지 않는다. 도구 설치법도 없다. 한 달에 얼마를 벌게 해 준다는 약속도 하지 않는다. 대신 숫자마다 무엇을, 언제부터 언제까지 셌는지를 붙였다.</p>
+        <p>AI가 만든 코드를 확인하고 고치는 법은 1권 <a href="/books/vibecoding-gyojeong/">「바이브코딩 교정법」</a>에 있다. 이 책에서 코드가 나오면 돈과 엮인 부분만 본다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="info">
+    <div class="wrap">
+      <h2>책 정보</h2>
+      <dl>
+        <dt>형식</dt><dd>PDF 한 파일, 약 240쪽</dd>
+        <dt>판형</dt><dd>125×200mm. 휴대폰 폭에 맞춰 열어도 본문이 읽히는 크기</dd>
+        <dt>지은이</dt><dd>다니엘. 혼자 SaaS를 만들어 운영한다. 「바이브코딩 교정법」을 썼다</dd>
+        <dt>출간</dt><dd>준비 중. 가격은 출간 때 알린다</dd>
+        <dt>기준</dt><dd>결제 서비스 수수료, 법과 세금 정보는 2026년 10월 기준</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="wrap">
+      <h2>자주 묻는 것</h2>
+      <details><summary>언제 나오나요?</summary><div class="a">원고와 조판은 끝났고 마지막 사실 확인을 하고 있습니다. 출간 알림 메일을 보내 주시면 나오는 날 답장으로 알려 드립니다.</div></details>
+      <details><summary>1권을 먼저 읽어야 하나요?</summary><div class="a">아니요. 이 책만 읽어도 됩니다. 1권은 AI가 만든 코드를 확인하고 고치는 법을, 이 책은 만든 것으로 돈을 받는 법을 다룹니다.</div></details>
+      <details><summary>개발 이야기가 많나요?</summary><div class="a">코드는 돈과 권한이 지나가는 자리만 봅니다. 5장과 부록 G에서 AI 코딩 도구에 저장소를 맡기기 전에 정할 것을 다룹니다. 규칙 파일과 훅, 비밀 키를 두는 곳, DB를 연결할 때 좁힐 범위, 배포가 안 될 때 먼저 볼 곳입니다. 나머지 장은 문제 고르기, 가격, 결제, 법, 사람 모으기입니다.</div></details>
+      <details><summary>사례 서비스는 어떤 서비스인가요?</summary><div class="a">대학생용 AI 강의노트 서비스입니다. 강의를 녹음하거나 영상 주소를 넣으면 전사본과 요약, 필기 노트를 만들어 줍니다. 서비스 이름은 밝히지 않습니다.</div></details>
+      <details><summary>결제와 파일은 어떻게 받나요?</summary><div class="a">1권과 같습니다. 회원 가입 없이 Polar로 결제하고, 국내 카드, 카카오페이, 네이버페이를 쓸 수 있습니다. 결제가 끝나면 주문 확인 메일로 PDF를 내려받습니다.</div></details>
+      <details><summary>사업자등록이나 세금도 나오나요?</summary><div class="a">9장에서 사업자등록, 통신판매업 신고, 부가세와 종합소득세, 약관과 환불을 2026년 10월 기준 법령과 국세청 자료로 정리했습니다. 법률·세무 자문은 아니고, 어디서부터 확인할지 알려 주는 안내입니다.</div></details>
+    </div>
+  </section>
+
+  <section class="end" id="end">
+    <div class="log" aria-hidden="true">817a379  2026-04-11  feat: <mark>initial release</mark> with full transcription service
+2215341  2026-04-11  feat: credit deduction on success only, error_log, phase progress bar
+0ef195a  2026-04-15  security: atomic credit reserve/refund + idempotent webhook + billing &amp; refund pages
+c4af3e9  2026-04-23  pricing: aggressive repricing — ~40% off, +40 credits on mid tier
+cf86f6b  2026-09-09  fix(backend): reconcile credits on storage, url and retry paths (#35)
+4aee956  2026-10-01  feat: 중간고사 크레딧 이벤트 (10/1~10/8) + 배너 CTA (#37)
+1acf38f  2026-10-09  feat: subscriptions with a weekly credit allowance, sold through Polar</div>
+    <div class="wrap in">
+      <h2>나오는 날 알려 드릴게요</h2>
+      <p>메일 한 통이면 됩니다. 출간일에 답장으로 판매 페이지 주소를 보내 드립니다.</p>
+      <div class="ctas"><a class="btn primary js-cta" data-place="bottom" href="#end">출간 알림 받기</a></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><a href="/">북키</a> · 첫 결제</span>
+    <span>문의 <span class="js-contact"></span></span>
+  </div>
+</footer>
+
+<script>
+/* 판매 설정: 출간하면 checkoutUrl 에 Polar 결제 링크를 넣고 value 에 가격을 넣는다. 그 전에는 출간 알림 메일로 동작한다 */
+window.BOOKKY = { page: "first-payment", book: "첫 결제", value: 0, checkoutUrl: "", notifyEmail: "hi.danleedev@gmail.com", contact: "hi.danleedev@gmail.com" };
+</script>
+<script src="/assets/bookky.js" defer></script>
+</body>
+</html>
